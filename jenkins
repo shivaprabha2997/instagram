@@ -25,39 +25,37 @@ pipeline {
             steps {
                 sh '''
                 python3 -m venv $PYTHON_ENV
-                ./$PYTHON_ENV/bin/pip install --upgrade pip
-                ./$PYTHON_ENV/bin/pip install -r requirements.txt
+                $PYTHON_ENV/bin/pip install --upgrade pip
+                $PYTHON_ENV/bin/pip install -r requirements.txt
                 '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh './$PYTHON_ENV/bin/python -m unittest discover -s tests || true'
+                sh '$PYTHON_ENV/bin/python -m unittest discover -s tests'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-                '''
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
             }
         }
 
         stage('Stop Old Container') {
             steps {
                 sh '''
-                docker rm -f ${CONTAINER_NAME} || true
+                if [ $(docker ps -aq -f name=${CONTAINER_NAME}) ]; then
+                    docker rm -f ${CONTAINER_NAME}
+                fi
                 '''
             }
         }
 
         stage('Run New Container') {
             steps {
-                sh '''
-                docker run -d -p 1234:8000 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}
-                '''
+                sh 'docker run -d -p 1234:8000 --name ${CONTAINER_NAME} ${IMAGE_NAME}:${IMAGE_TAG}'
             }
         }
 
