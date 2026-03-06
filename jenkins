@@ -7,9 +7,9 @@ pipeline {
 
     environment {
         DOCKER_USER = "surya8442"
-        IMAGE_NAME = "hotstar_img"
+        IMAGE_NAME = "instagram_img"
         IMAGE_TAG = "latest"
-        CONTAINER_NAME = "hotstar_cont"
+        CONTAINER_NAME = "instagram_cont"
         PYTHON_ENV = "venv"
     }
 
@@ -17,7 +17,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Surya8442/HOTSTAR-Project.git'
+                git branch: 'main', url: 'https://github.com/Surya8442/instaclone.git'
             }
         }
 
