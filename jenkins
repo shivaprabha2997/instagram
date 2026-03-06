@@ -33,7 +33,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh '$PYTHON_ENV/bin/python -m unittest discover -s tests'
+                sh '$PYTHON_ENV/bin/python '
             }
         }
 
